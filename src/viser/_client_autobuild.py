@@ -181,9 +181,11 @@ def _install_sandboxed_node() -> Path:
     installed to `.nodeenv/Scripts`."""
 
     min_node_version = (20, 19, 0)
+    env_dir = Path(
+        os.environ.get("VISER_NODEENV_DIR", str(client_dir / ".nodeenv"))
+    )
 
     def get_node_bin_dir() -> Path:
-        env_dir = client_dir / ".nodeenv"
         node_bin_dir = env_dir / "bin"
         if not node_bin_dir.exists():
             node_bin_dir = env_dir / "Scripts"
@@ -220,7 +222,6 @@ def _install_sandboxed_node() -> Path:
         return node_version < min_node_version
 
     node_bin_dir = get_node_bin_dir()
-    env_dir = client_dir / ".nodeenv"
     if (node_bin_dir / "npx").exists() and not needs_node_upgrade(node_bin_dir):
         import rich
 
